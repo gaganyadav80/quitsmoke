@@ -17,7 +17,7 @@ class SplashPage extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    'Giv',
+                    'Quit',
                     style: GoogleFonts.montserrat(
                       fontSize: 2.2 * hm,
                       color: Colors.black,
@@ -25,7 +25,7 @@ class SplashPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Notes.',
+                    'Smoke.',
                     style: GoogleFonts.montserrat(
                       fontSize: 2.2 * hm,
                       color: Colors.black,
@@ -49,7 +49,15 @@ class SplashPage extends StatelessWidget {
             ),
             SizedBox(height: 30 * hm),
             Text(
-              "Checking your Google Login Status",
+              "Checking your Login Status",
+              style: GoogleFonts.sourceSansPro(
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+                fontSize: 2.1 * hm,
+              ),
+            ),
+            Text(
+              "GivNotes Inc.",
               style: GoogleFonts.sourceSansPro(
                 color: Colors.black,
                 fontWeight: FontWeight.w400,

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "452506479720",
+    "firebase_url": "https://quit-smoke-70e2e.firebaseio.com",
+    "project_id": "quit-smoke-70e2e",
+    "storage_bucket": "quit-smoke-70e2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452506479720:android:2dd5b7a8db50f898681fdd",
+        "android_client_info": {
+          "package_name": "com.quitsmoke"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "452506479720-n2jta03q3lnqcf950chf403h50fnsems.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quitsmoke",
+            "certificate_hash": "2eeca4cd1ba843aabc3a3c8d35ae79060535e0c5"
+          }
+        },
+        {
+          "client_id": "452506479720-6agdp0sm6fgn3k6elbnmlmeekeu75j6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiDX4E1PDzBJez9tL4waT_JAZCZzriCcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "452506479720-6agdp0sm6fgn3k6elbnmlmeekeu75j6i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
