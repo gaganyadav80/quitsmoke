@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login/login.dart';
 import 'package:quit_smoke/enums/sizeConfig.dart';
-import 'package:quit_smoke/enums/var.dart';
 import 'package:quit_smoke/pages/homePage.dart';
 import 'package:quit_smoke/pages/loginPage.dart';
 import 'package:quit_smoke/ui/splash.dart';
@@ -40,8 +39,8 @@ class _CheckLoginState extends State<CheckLogin> {
     return StreamBuilder(
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+        Login.initUser();
         if (snapshot.connectionState == ConnectionState.waiting) return SplashPage();
-
         if (!snapshot.hasData || snapshot.data == null) return LoginPage();
 
         return HomePage();

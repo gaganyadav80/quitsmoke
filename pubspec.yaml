@@ -32,6 +32,7 @@ dependencies:
   toast:
   intl:
   connectivity: ^0.4.9
+  date_time_format: ^1.0.0+4
   
 # dependency_overrides:
   # flutter_offline:
