@@ -1,61 +1,134 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:login/login.dart';
 import 'package:quit_smoke/enums/sizeConfig.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 double hm = SizeConfig.heightMultiplier;
 double wm = SizeConfig.widthMultiplier;
 
 // * Colors
-Color appBar = Color(0xff2C2C2C);
+// Color appBar = Color(0xff2C2C2C);
+Color appBar = Colors.grey[800];
 Color body = Color(0xff191919);
 Color card = Color(0xff272727);
 Color green = Color(0xff62E843);
 Color darkGreen = Color(0xff3DBB2B);
+Color datetimePicker = Color(0xff2C2C2C);
+Color introGreen = Color(0xff00C27D);
+Color introPink = Color(0xffF10050);
+Color introYellow = Color(0xffF0B809);
+Color introButtons = Color(0xff2670C2);
 
 // * Logic values
-bool isFirstLaunch = true;
+// bool isFirstLaunch = true;
 
-void setFirstLaunch({bool isFirstLaunch = true}) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('isFirstLaunch', isFirstLaunch);
+// void setFirstLaunch({bool isFirstLaunch = true}) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   await prefs.setBool('isFirstLaunch', isFirstLaunch);
+// }
+
+// Future<bool> getFirstLauch() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   return prefs.getBool('isFirstLaunch');
+// }
+
+// Future<Null> setQuitDate({String value}) async {
+//   print('setQuitDate: $value');
+
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   await prefs.setString('quitDate', value);
+// }
+
+// Future<String> getQuitDate() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   return prefs.getString('quitDate');
+// }
+String collectionName;
+
+class DocRef {
+  static CollectionReference userRef;
+  //
+  static final DocumentReference smokedataRef = userRef.document("smokeData");
+  static final DocumentReference journaldataRef = userRef.document("journalData");
+  static final DocumentReference goaldataRef = userRef.document("goalData");
 }
 
-Future<bool> getFirstLauch() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('isFirstLaunch');
-}
+// class SmokeData {
+//   static int packCost = 0;
+//   static int packQty = 0;
+//   static int dailyQty = 0;
+//   static String quitDateStr;
+//   static DateTime quitDateDT;
+// }
 
-Future<Null> setQuitDate({String value}) async {
-  print('setQuitDate: $value');
+// class JournalData {
+//   static DateTime dateSmokedDT;
+//   static String dateSmokedStr;
+//   static int todayQty;
+//   static int craveRating;
+//   static String comment;
+// }
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('quitDate', value);
-}
+// class GoalsData {
+//   static DateTime goalDateDT;
+//   static String goalDateStr;
+//   static String goal;
+// }
 
-Future<String> getQuitDate() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString('quitDate');
-}
+Map<String, dynamic> smokedata = {
+  'packCost': 0,
+  'packQty': 0,
+  'dailyQty': 0,
+  'quitDateStr': 'null',
+  'quitDateDT': DateTime.now(),
+};
 
-FirebaseUser currentUser;
-String blankUser = '', photoUrl = '', displayName = 'Not Logged in', email = '';
+Map<String, dynamic> jounaldata = {
+  'todayQty': 0,
+  'cravingRating': 0,
+  'comment': null,
+  'dateSmokedStr': 'null',
+  'dateSmokedDT': null,
+};
 
-Future<void> setUserDetails() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+Map<String, dynamic> goalsData = {
+  'goal': null,
+  'goalDateStr': 'null',
+  'goalDateDT': null,
+};
 
-  await prefs.setString('url', currentUser.photoUrl);
-  await prefs.setString('name', currentUser.displayName);
-  await prefs.setString('email', currentUser.email);
-}
+String timeSmokeFree;
+bool quitDateReached = false;
 
-Future<void> getUserDetails() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+void setSmokeData() {
+  Timestamp _timestamp;
 
-  photoUrl = prefs.getString('url');
-  displayName = prefs.getString('name');
-  email = prefs.getString('email');
+  DocRef.smokedataRef.get().then((document) {
+    if (document.exists) {
+      // document.data.forEach((key, value) {
+      //   if (key == 'packCost') {
+      //     SmokeData.packCost = value;
+      //   } else if (key == 'packQty') {
+      //     SmokeData.packQty = value;
+      //   } else if (key == 'dailyQty') {
+      //     SmokeData.dailyQty = value;
+      //   } else if (key == 'quitDateStr') {
+      //     SmokeData.quitDateStr = value;
+      //   } else if (key == 'quitDateDT') {
+      //     _timestamp = value;
+      //     SmokeData.quitDateDT = _timestamp.toDate();
+      //     print("DATA CHECK AND GET SUCCESSFULL");
+      //   }
+      // });
+      smokedata = document.data;
+
+      _timestamp = document.data['quitDateDT'];
+      smokedata['quitDateDT'] = _timestamp.toDate();
+
+      print("DATA CHECK AND GET SUCCESSFULL");
+      //
+    } else {
+      print("DATA NOT PRESENT");
+    }
+  });
 }

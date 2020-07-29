@@ -5,15 +5,60 @@ import 'package:quit_smoke/enums/var.dart';
 import 'package:toast/toast.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key key}) : super(key: key);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: body,
       appBar: AppBar(
         backgroundColor: appBar,
         title: Text('Account'),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: appBar,
+                  content: Text(
+                    "Do you want to permanently delete this account?",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  actions: [
+                    FlatButton(
+                      child: Text(
+                        'CANCLE',
+                        style: TextStyle(color: darkGreen),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    FlatButton(
+                      child: Text(
+                        "DELETE",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        print('Delete tap');
+                        Login.currentUser.delete();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                ),
+              );
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem(
+                value: "deleteacc",
+                child: Text("Delete account?"),
+              )
+            ],
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -37,15 +82,8 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  "You can easily restore your data should you loose",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 3.5 * wm,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                Text(
-                  "or change your phone",
+                  "You can easily restore your data should you loose or change your phone",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 3.5 * wm,
@@ -107,7 +145,7 @@ class ProfilePage extends StatelessWidget {
             onPressed: () {
               // TODO fix this in login.dart flutter package
               debugPrint("RESET PASSWORD PRESSED");
-              Scaffold.of(context).showSnackBar(
+              _scaffoldKey.currentState.showSnackBar(
                 SnackBar(
                   content: Text("Will be added soon!"),
                   backgroundColor: appBar,

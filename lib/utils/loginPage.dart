@@ -1,43 +1,59 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:focus_widget/focus_widget.dart';
-import 'package:getflutter/getflutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:login/login.dart';
 import 'package:quit_smoke/enums/var.dart';
+import 'package:quit_smoke/pages/home.dart';
+import 'package:quit_smoke/utils/signupPage.dart';
 import 'package:toast/toast.dart';
 
-class SignupPage extends StatefulWidget {
-  SignupPage({Key key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key key}) : super(key: key);
 
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _LoginPageState extends State<LoginPage> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
-  final FocusNode _rePasswordFocus = FocusNode();
-  final FocusNode _nameFocus = FocusNode();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _rePasswordController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
 
+  DateTime currentBackPressTime;
   bool _obscureText = true;
   bool _isEmailValid = true;
   bool _isPassValid = true;
-  bool _isRePassValid = true;
+
+  @override
+  void dispose() {
+    _emailController?.dispose();
+    _passwordController?.dispose();
+    _emailFocus?.dispose();
+    _passwordFocus?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: body,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: appBar,
-        title: Text('Signup Page', style: TextStyle(color: Colors.white)),
+        leading: Icon(Icons.supervisor_account, color: Colors.white),
+        title: Text(
+          'Connect with email',
+          style: TextStyle(
+            fontSize: 4.5 * wm,
+            fontWeight: FontWeight.w400,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -45,37 +61,6 @@ class _SignupPageState extends State<SignupPage> {
           child: Column(
             children: [
               SizedBox(height: 10 * wm),
-              FocusWidget(
-                focusNode: _nameFocus,
-                child: TextFormField(
-                  style: TextStyle(color: Colors.white),
-                  cursorColor: darkGreen,
-                  autocorrect: false,
-                  enableInteractiveSelection: true,
-                  enableSuggestions: true,
-                  controller: _nameController,
-                  focusNode: _nameFocus,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  onEditingComplete: () {
-                    _emailFocus.requestFocus();
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: darkGreen),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey[600]),
-                    ),
-                    labelText: "Name:",
-                    labelStyle: TextStyle(color: Colors.grey[600]),
-                  ),
-                ),
-              ),
-              SizedBox(height: 3 * wm),
               FocusWidget(
                 focusNode: _emailFocus,
                 onLostFocus: (widget, focusNode) {
@@ -135,9 +120,9 @@ class _SignupPageState extends State<SignupPage> {
                   obscureText: _obscureText,
                   controller: _passwordController,
                   focusNode: _passwordFocus,
-                  textInputAction: TextInputAction.next,
                   enableInteractiveSelection: true,
                   enableSuggestions: false,
+                  textInputAction: TextInputAction.done,
                   onChanged: (value) {
                     if (value.isEmpty) {
                       setState(() => _isPassValid = false);
@@ -146,78 +131,33 @@ class _SignupPageState extends State<SignupPage> {
                     }
                   },
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: darkGreen),
-                    ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.red[400]),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey[600]),
                     ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: darkGreen),
+                    ),
                     suffixIcon: IconButton(
-                      icon: Icon(Icons.remove_red_eye),
-                      color: _obscureText ? Colors.grey[600] : darkGreen,
+                      icon: Icon(
+                        Icons.remove_red_eye,
+                        color: _obscureText ? Colors.grey[600] : darkGreen,
+                      ),
+                      color: _obscureText ? Colors.grey : darkGreen,
                       onPressed: () {
                         setState(() => _obscureText = !_obscureText);
                       },
                     ),
                     errorText: _isPassValid ? null : 'Field is required',
-                    errorStyle: TextStyle(color: Colors.red[400]),
+                    errorStyle: TextStyle(
+                      color: Colors.red[400],
+                    ),
                     labelText: "Password:",
-                    labelStyle: TextStyle(color: Colors.grey[600]),
-                  ),
-                ),
-              ),
-              SizedBox(height: 3 * wm),
-              FocusWidget(
-                focusNode: _rePasswordFocus,
-                onLostFocus: (widget, focusNode) {
-                  setState(() => _isRePassValid = true);
-                },
-                child: TextFormField(
-                  style: TextStyle(color: Colors.white),
-                  autocorrect: false,
-                  cursorColor: _isRePassValid ? darkGreen : Colors.red[400],
-                  obscureText: _obscureText,
-                  controller: _rePasswordController,
-                  focusNode: _rePasswordFocus,
-                  enableInteractiveSelection: true,
-                  enableSuggestions: false,
-                  textInputAction: TextInputAction.done,
-                  onChanged: (value) {
-                    if (value.isEmpty) {
-                      setState(() => _isRePassValid = false);
-                    } else {
-                      setState(() => _isRePassValid = true);
-                    }
-                  },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: darkGreen),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red[400]),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey[600]),
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.remove_red_eye),
-                      color: _obscureText ? Colors.grey[600] : darkGreen,
-                      onPressed: () {
-                        setState(() => _obscureText = !_obscureText);
-                      },
-                    ),
-                    errorText: _isRePassValid ? null : 'Field is required',
-                    errorStyle: TextStyle(color: Colors.red[400]),
-                    labelText: "Password Again:",
                     labelStyle: TextStyle(color: Colors.grey[600]),
                   ),
                 ),
@@ -227,22 +167,33 @@ class _SignupPageState extends State<SignupPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   FlatButton(
-                    padding: EdgeInsets.zero,
-                    child: Text("Cancle", style: TextStyle(color: darkGreen)),
+                    padding: EdgeInsets.symmetric(horizontal: wm),
+                    child: Text(
+                      "Create new account",
+                      style: TextStyle(
+                        color: darkGreen,
+                      ),
+                    ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignupPage(),
+                        ),
+                      );
                     },
                   ),
                   Container(
                     width: 25 * wm,
                     height: 9.5 * wm,
                     child: GFButton(
+                      elevation: 5,
                       color: darkGreen,
                       type: GFButtonType.solid,
                       shape: GFButtonShape.pills,
                       size: GFSize.MEDIUM,
-                      text: 'Sign up',
-                      textStyle: GoogleFonts.roboto(
+                      text: 'Log in',
+                      textStyle: TextStyle(
                         fontSize: 4 * wm,
                         color: Colors.white,
                       ),
@@ -255,30 +206,32 @@ class _SignupPageState extends State<SignupPage> {
                           //
                         } else if (_passwordController.text.isEmpty ||
                             _emailController.text.isEmpty) {
-                          //
-                          _showToast("Please fill all the details");
-                          //
-                        } else if (_passwordController.text != _rePasswordController.text) {
-                          //
-                          _showToast("Passwords don't match");
-                          //
+                          _showToast("Please enter login details");
                         } else {
-                          Login.signUpWithEmail(
+                          Login.signInWithEmail(
                             email: _emailController,
                             password: _passwordController,
-                            displayName: _nameController,
                             context: context,
-                          ).then((value) {
-                            if (value == null) {
-                              //
-                              _showToast("Sign up failed");
-                              //
+                          );
+
+                          // ! WORKING
+                          Login.checkLogin(Login.currentUser).then((value) {
+                            if (value) {
+                              _showToast("Login success");
+                            } else if (value == false) {
+                              _showToast("Login failed :(");
                             } else {
-                              _showToast("Signup success... Logging in");
-                              Navigator.pop(context);
+                              _showToast("Something's fucked up. idk what !!");
                             }
                           });
                         }
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(),
+                          ),
+                        );
                       },
                     ),
                   ),

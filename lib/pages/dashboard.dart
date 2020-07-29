@@ -1,60 +1,48 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:quit_smoke/enums/var.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({Key key}) : super(key: key);
+  const Dashboard({Key key}) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  DateTime quitDateDT;
-  Duration difference;
-
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
           width: double.infinity,
-          height: 67.5 * wm,
           color: Colors.transparent,
           child: Image.asset('assets/images/timer.png'),
         ),
-        Center(
-          child: Text(
-            difference == null ? '0 seconds' : '${difference.inSeconds} seconds',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 5 * wm,
+        Padding(
+          padding: EdgeInsets.only(top: 5 * wm),
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  'Time smoke free',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 5.7 * wm,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+                SizedBox(height: 2 * wm),
+                Text(
+                  quitDateReached ? '$timeSmokeFree' : "We'll start soon",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13 * wm,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        Column(
-          children: [
-            RaisedButton(
-              child: Text('get'),
-              onPressed: () {
-                getQuitDate().then((value) {
-                  quitDateDT = DateFormat.yMd().add_Hms().parse(value);
-                  //
-                  print('value: $value');
-                  print('quitDate: $quitDateDT');
-                });
-              },
-            ),
-            RaisedButton(
-              child: Text('start'),
-              onPressed: () {
-                print("start time: ${DateTime.now()}");
-                setState(() => difference = DateTime.now().difference(quitDateDT));
-              },
-            ),
-          ],
         )
       ],
     );
