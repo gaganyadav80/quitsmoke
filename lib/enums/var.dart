@@ -100,35 +100,51 @@ Map<String, dynamic> goalsData = {
 String timeSmokeFree;
 bool quitDateReached = false;
 
+Duration moneyMultiplier;
+double moneyTillSaved;
+int yearlySaved;
+
 void setSmokeData() {
   Timestamp _timestamp;
 
   DocRef.smokedataRef.get().then((document) {
-    if (document.exists) {
-      // document.data.forEach((key, value) {
-      //   if (key == 'packCost') {
-      //     SmokeData.packCost = value;
-      //   } else if (key == 'packQty') {
-      //     SmokeData.packQty = value;
-      //   } else if (key == 'dailyQty') {
-      //     SmokeData.dailyQty = value;
-      //   } else if (key == 'quitDateStr') {
-      //     SmokeData.quitDateStr = value;
-      //   } else if (key == 'quitDateDT') {
-      //     _timestamp = value;
-      //     SmokeData.quitDateDT = _timestamp.toDate();
-      //     print("DATA CHECK AND GET SUCCESSFULL");
-      //   }
-      // });
+    if (document.exists && document != null) {
       smokedata = document.data;
 
       _timestamp = document.data['quitDateDT'];
       smokedata['quitDateDT'] = _timestamp.toDate();
 
       print("DATA CHECK AND GET SUCCESSFULL");
-      //
+
+      // setState(() {
+      moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
+      moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+      // });
     } else {
       print("DATA NOT PRESENT");
     }
   });
 }
+
+void setReference() {
+  collectionName = "${Login.currentUser.displayName.toLowerCase().trim()}_${Login.currentUser.uid}";
+  debugPrint("COLLECTION : $collectionName");
+  DocRef.userRef = Firestore.instance.collection("$collectionName");
+}
+
+// document.data.forEach((key, value) {
+//   if (key == 'packCost') {
+//     SmokeData.packCost = value;
+//   } else if (key == 'packQty') {
+//     SmokeData.packQty = value;
+//   } else if (key == 'dailyQty') {
+//     SmokeData.dailyQty = value;
+//   } else if (key == 'quitDateStr') {
+//     SmokeData.quitDateStr = value;
+//   } else if (key == 'quitDateDT') {
+//     _timestamp = value;
+//     SmokeData.quitDateDT = _timestamp.toDate();
+//     print("DATA CHECK AND GET SUCCESSFULL");
+//   }
+// });

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
@@ -24,10 +25,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   TabController gfTabController;
   DateTime currentBackPressTime;
-  Timer timer;
-  int levelPrec = 2;
+  Timer timerSmokeFree;
   DateTime temp;
-  int temp2;
+  Timer timerMoneySaved;
 
   final List<PopupMenuItem<String>> _popUpMenuItems = <String>['Settings', 'Logout']
       .map(
@@ -44,7 +44,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       timeSmokeFree = DateTimeFormat.relative(
         smokedata['quitDateDT'] ?? DateTime.now(),
         levelOfPrecision: 3,
-        minUnitOfTime: UnitOfTime.hour,
+        ifNow: "Let's Go!",
+        minUnitOfTime: UnitOfTime.second,
         abbr: true,
       ).toLowerCase();
     });
@@ -56,13 +57,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     setSmokeData();
     gfTabController = TabController(length: 3, vsync: this);
     temp = smokedata['quitDateDT'];
-    timer = Timer.periodic(Duration(seconds: 1), (timer) => fetchTimeSmokeFree());
+    timerSmokeFree = Timer.periodic(Duration(seconds: 1), (timer) => fetchTimeSmokeFree());
   }
 
   @override
   void dispose() {
     gfTabController?.dispose();
-    timer?.cancel();
+    timerSmokeFree?.cancel();
     super.dispose();
   }
 
@@ -71,7 +72,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return WillPopScope(
       onWillPop: () => _onPop(),
       child: Scaffold(
-        backgroundColor: body,
+        backgroundColor: card,
         appBar: AppBar(
           backgroundColor: appBar,
           automaticallyImplyLeading: false,
@@ -84,12 +85,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
         ),
         body: GFTabBarView(
+          physics: NeverScrollableScrollPhysics(),
           controller: gfTabController,
           children: [
-            Dashboard(),
-            JournalPage(),
-            GoalsPage(),
-            // SettingsPage(),
+            SingleChildScrollView(child: Dashboard()),
+            SingleChildScrollView(child: JournalPage()),
+            SingleChildScrollView(child: GoalsPage()),
           ],
         ),
         bottomNavigationBar: GFTabBar(
@@ -106,21 +107,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           tabs: [
             Tab(
               icon: Icon(Icons.dashboard),
-              child: Text(
-                "Dashboard",
-              ),
+              child: Text("Dashboard"),
             ),
             Tab(
               icon: Icon(Icons.book),
-              child: Text(
-                "Journal",
-              ),
+              child: Text("Journal"),
             ),
             Tab(
               icon: Icon(Icons.check_circle_outline),
-              child: Text(
-                "Goals",
-              ),
+              child: Text("Goals"),
             ),
           ],
         ),

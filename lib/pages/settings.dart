@@ -107,6 +107,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         smokedata['quitDateDT'] = _datetime;
                       });
 
+                      // money saved
+                      moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
+                      moneyTillSaved = (moneyMultiplier.inDays) *
+                          smokedata['dailyQty'] *
+                          (smokedata['packCost'] / smokedata['packQty']);
+                      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                      //
+
                       DocRef.smokedataRef.updateData({
                         'quitDateStr': _quitdateController.text,
                         'quitDateDT': Timestamp.fromDate(_datetime),
@@ -240,6 +248,11 @@ class _SettingsPageState extends State<SettingsPage> {
                           "quitDateStr": null,
                           "quitDateDT": null,
                         };
+
+                        // money saved
+                        moneyTillSaved = 0;
+                        yearlySaved = 0;
+                        //
 
                         // SmokeData.packCost = 0;
                         // SmokeData.packQty = 0;

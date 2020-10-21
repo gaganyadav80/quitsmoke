@@ -53,6 +53,14 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   setState(() {
                     smokedata['packCost'] = int.parse(_textEditingController.text);
                   });
+
+                  // money saved
+                  moneyTillSaved = (moneyMultiplier.inDays) *
+                      smokedata['dailyQty'] *
+                      (smokedata['packCost'] / smokedata['packQty']);
+                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                  //
+
                   _textEditingController.clear();
                   Navigator.pop(context);
                 },
@@ -92,6 +100,14 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   setState(() {
                     smokedata['packQty'] = int.parse(_textEditingController.text);
                   });
+
+                  // money saved
+                  moneyTillSaved = (moneyMultiplier.inDays) *
+                      smokedata['dailyQty'] *
+                      (smokedata['packCost'] / smokedata['packQty']);
+                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                  //
+
                   _textEditingController.clear();
                   Navigator.pop(context);
                 },
@@ -131,6 +147,14 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   setState(() {
                     smokedata['dailyQty'] = int.parse(_textEditingController.text);
                   });
+
+                  // money saved
+                  moneyTillSaved = (moneyMultiplier.inDays) *
+                      smokedata['dailyQty'] *
+                      (smokedata['packCost'] / smokedata['packQty']);
+                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                  //
+
                   _textEditingController.clear();
                   Navigator.pop(context);
                 },

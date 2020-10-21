@@ -14,6 +14,12 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   DateTime currentBackPressTime;
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   setReference();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -42,7 +48,10 @@ class _IntroScreenState extends State<IntroScreen> {
             title: "Journal, Goals",
             body: "Keep your cigarettes journals and want to keep some goals? Gotcha!",
             bodyColor: introYellow,
-            bodyWidget: Lottie.asset("assets/animations/calendar-diary.json"),
+            bodyWidget: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5 * wm),
+              child: Lottie.asset("assets/animations/[.]read-book.json"),
+            ),
           ),
         ],
       ),
@@ -62,8 +71,7 @@ class _IntroScreenState extends State<IntroScreen> {
 
   Future<bool> _onPop() async {
     DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+    if (currentBackPressTime == null || now.difference(currentBackPressTime) > Duration(seconds: 2)) {
       currentBackPressTime = now;
       _showToast('Press back again to exit');
       return false;

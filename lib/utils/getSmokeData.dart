@@ -34,6 +34,7 @@ class _GetSmokeDataState extends State<GetSmokeData> {
   @override
   void initState() {
     super.initState();
+    setReference();
     _quitdateController.text = "${DateFormat("h:mm a, dd MMM yyyy").format(_datetime)}";
   }
 
@@ -206,8 +207,7 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                           );
                           print('confirm $_datetime');
                           setState(() {
-                            _quitdateController.text =
-                                "${DateFormat("h:mm a, dd MMM yyyy").format(_datetime)}";
+                            _quitdateController.text = "${DateFormat("h:mm a, dd MMM yyyy").format(_datetime)}";
                           });
                         },
                       );
@@ -248,9 +248,7 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                   color: Colors.white,
                 ),
                 onPressed: () async {
-                  _emptyField = _packcostController.text.isEmpty ||
-                      _packqtyController.text.isEmpty ||
-                      _dailyqtyController.text.isEmpty;
+                  _emptyField = _packcostController.text.isEmpty || _packqtyController.text.isEmpty || _dailyqtyController.text.isEmpty;
 
                   var connectionState = await (Connectivity().checkConnectivity());
 
@@ -278,8 +276,16 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                       'quitDateStr': _quitdateController.text,
                       'quitDateDT': _datetime,
                     };
+
+                    // money saved
+                    moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
+                    moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                    yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
                     //
+
                     _showToast("Data updated!");
+                    setReference();
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(

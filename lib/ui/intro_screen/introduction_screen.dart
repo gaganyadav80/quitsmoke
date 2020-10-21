@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:dots_indicator/dots_indicator.dart';
@@ -140,12 +139,14 @@ class IntroductionScreenState extends State<IntroductionScreen> {
                       height: 12.5 * wm,
                       child: FlatButton(
                         color: introButtons,
-                        child: Text("LOG IN",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 3.5 * wm,
-                            )),
+                        child: Text(
+                          "LOG IN",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 3.5 * wm,
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,

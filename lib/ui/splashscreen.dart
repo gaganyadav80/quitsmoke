@@ -8,32 +8,10 @@ class SplashScreen extends StatefulWidget {
   final int seconds;
   final Color backgroundColor;
   final dynamic navigateAfterSeconds;
-  // final TextStyle styleTextUnderTheLoader;
-  // final Text title;
-  // final double photoSize;
-  // final dynamic onClick;
-  // final Color loaderColor;
-  // final Image image;
-  // final Text loadingText;
-  // final ImageProvider imageBackground;
-  // final Gradient gradientBackground;
   SplashScreen({
     @required this.seconds,
     this.navigateAfterSeconds,
     this.backgroundColor = Colors.white,
-    // this.photoSize,
-    // this.title = const Text(''),
-    // this.onClick,
-    // this.loaderColor,
-    // this.styleTextUnderTheLoader = const TextStyle(
-    // fontSize: 18.0,
-    // fontWeight: FontWeight.bold,
-    // color: Colors.black
-    // ),
-    // this.image,
-    // this.loadingText  = const Text(""),
-    // this.imageBackground,
-    // this.gradientBackground
   });
 
   @override
@@ -57,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => widget.navigateAfterSeconds,
+            // animationType: AnimationType.fade,
           ),
         );
       } else {
@@ -70,25 +49,26 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: widget.backgroundColor,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 20 * wm, left: 3 * wm),
+            padding: EdgeInsets.only(top: 12 * hm, left: 5 * wm),
             child: Row(
               children: <Widget>[
                 Text(
-                  'Quit',
+                  'Giv',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
-                    fontSize: 2.2 * hm,
+                    fontSize: 5 * wm,
                     color: Colors.black,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  'Smoke.',
+                  'Notes.',
                   style: TextStyle(
                     fontFamily: 'Montserrat',
-                    fontSize: 2.2 * hm,
+                    fontSize: 5 * wm,
                     color: Colors.black,
                     fontWeight: FontWeight.w400,
                   ),
@@ -96,10 +76,10 @@ class _SplashScreenState extends State<SplashScreen> {
               ],
             ),
           ),
-          SizedBox(height: 25 * hm),
+          // SizedBox(height: 15 * hm),
           Center(
             child: Container(
-              height: 50 * wm,
+              height: 40 * wm,
               child: FlareActor(
                 'assets/animations/loading.flr',
                 animation: 'Alarm',
@@ -107,14 +87,16 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
           ),
-          SizedBox(height: 25 * hm),
-          Text(
-            "Powered by GivNotes Inc.",
-            style: TextStyle(
-              fontFamily: 'SourceSansPro',
-              color: Colors.black,
-              fontWeight: FontWeight.w400,
-              fontSize: 2.1 * hm,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 25),
+            child: Text(
+              "Powered by GivNotes Inc.",
+              style: TextStyle(
+                fontFamily: 'SourceSansPro',
+                color: Colors.black,
+                fontWeight: FontWeight.w400,
+                fontSize: 4.5 * wm,
+              ),
             ),
           ),
         ],
