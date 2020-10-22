@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:quit_smoke/enums/var.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key key}) : super(key: key);
+  const Dashboard({
+    Key key,
+    @required this.quitDateReached,
+    @required this.timeSmokeFree,
+  }) : super(key: key);
+
+  final bool quitDateReached;
+  final String timeSmokeFree;
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -25,7 +32,7 @@ class _DashboardState extends State<Dashboard> {
                 child: Column(
                   children: [
                     Text(
-                      !quitDateReached ? "We'll start after" : 'Time smoke free',
+                      !widget.quitDateReached ? "We'll start after" : 'Time smoke free',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 5.7 * wm,
@@ -34,7 +41,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     SizedBox(height: 2 * wm),
                     Text(
-                      '$timeSmokeFree',
+                      '${widget.timeSmokeFree}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 13 * wm,
@@ -86,6 +93,12 @@ class _DashboardState extends State<Dashboard> {
             fontSize: 7 * wm,
             fontWeight: FontWeight.w300,
           ),
+        ),
+        SizedBox(height: 5 * wm),
+        Container(
+          color: Color(0xff76B83D),
+          width: double.infinity,
+          height: 200,
         ),
       ],
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:login/login.dart';
 import 'package:quit_smoke/enums/var.dart';
+import 'package:quit_smoke/packages/login.dart';
 import 'package:toast/toast.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -17,10 +17,12 @@ class ProfilePage extends StatelessWidget {
         title: Text('Account'),
         actions: [
           PopupMenuButton<String>(
+            color: appBar,
             onSelected: (value) {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
+                  elevation: 0,
                   backgroundColor: appBar,
                   content: Text(
                     "Do you want to permanently delete this account?",
@@ -54,7 +56,10 @@ class ProfilePage extends StatelessWidget {
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               PopupMenuItem(
                 value: "deleteacc",
-                child: Text("Delete account?"),
+                child: Text(
+                  "Delete account?",
+                  style: TextStyle(color: Colors.white),
+                ),
               )
             ],
           ),
@@ -162,7 +167,8 @@ class ProfilePage extends StatelessWidget {
           ),
           SizedBox(height: 5 * wm),
           Text(
-            "We do not collect any of your data. 100% privacy",
+            "We do not collect any of your personal data. \nJust the numbers, 100% privacy.",
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
               fontSize: 3.5 * wm,

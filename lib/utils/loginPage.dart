@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:focus_widget/focus_widget.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:login/login.dart';
 import 'package:quit_smoke/enums/var.dart';
+import 'package:quit_smoke/packages/login.dart';
 import 'package:quit_smoke/pages/home.dart';
 import 'package:quit_smoke/utils/signupPage.dart';
 import 'package:toast/toast.dart';
@@ -216,12 +216,10 @@ class _LoginPageState extends State<LoginPage> {
                               context: context,
                             );
 
-                            print(Login.currentUser);
-
-                            // setReference();
-                            collectionName = "${Login.currentUser.displayName.toLowerCase().trim()}_${Login.currentUser.uid}";
-                            debugPrint("COLLECTION : $collectionName");
-                            DocRef.userRef = Firestore.instance.collection("$collectionName");
+                            setReference();
+                            // collectionName = "${Login.currentUser.email}";
+                            // debugPrint("COLLECTION : $collectionName");
+                            // DocRef.userRef = FirebaseFirestore.instance.collection("$collectionName");
 
                             // ! WORKING
                             // Login.checkLogin(Login.currentUser).then((value) {

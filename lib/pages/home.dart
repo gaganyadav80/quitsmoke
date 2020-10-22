@@ -1,14 +1,14 @@
 import 'dart:async';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:login/login.dart';
 import 'package:quit_smoke/enums/var.dart';
+import 'package:quit_smoke/packages/login.dart';
 import 'package:quit_smoke/pages/dashboard.dart';
 import 'package:quit_smoke/pages/journal.dart';
 import 'package:quit_smoke/pages/goals.dart';
@@ -23,11 +23,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  TabController gfTabController;
-  DateTime currentBackPressTime;
-  Timer timerSmokeFree;
-  DateTime temp;
-  Timer timerMoneySaved;
+  TabController _gfTabController;
+  DateTime _currentBackPressTime;
+  Timer _timerSmokeFree;
+  // Timer timerMoneySaved;
+
+  String _timeSmokeFree;
+  bool _quitDateReached = false;
+
+  // DateTime temp;
 
   final List<PopupMenuItem<String>> _popUpMenuItems = <String>['Settings', 'Logout']
       .map(
@@ -40,8 +44,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   void fetchTimeSmokeFree() {
     setState(() {
-      quitDateReached = smokedata['quitDateDT'].difference(DateTime.now()) < Duration(seconds: 0);
-      timeSmokeFree = DateTimeFormat.relative(
+      _quitDateReached = smokedata['quitDateDT'].difference(DateTime.now()) < Duration(seconds: 0);
+      _timeSmokeFree = DateTimeFormat.relative(
         smokedata['quitDateDT'] ?? DateTime.now(),
         levelOfPrecision: 3,
         ifNow: "Let's Go!",
@@ -55,15 +59,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     setSmokeData();
-    gfTabController = TabController(length: 3, vsync: this);
-    temp = smokedata['quitDateDT'];
-    timerSmokeFree = Timer.periodic(Duration(seconds: 1), (timer) => fetchTimeSmokeFree());
+    _gfTabController = TabController(length: 3, vsync: this);
+    _timerSmokeFree = Timer.periodic(Duration(seconds: 1), (timer) => fetchTimeSmokeFree());
   }
 
   @override
   void dispose() {
-    gfTabController?.dispose();
-    timerSmokeFree?.cancel();
+    _gfTabController?.dispose();
+    _timerSmokeFree?.cancel();
     super.dispose();
   }
 
@@ -86,9 +89,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
         body: GFTabBarView(
           physics: NeverScrollableScrollPhysics(),
-          controller: gfTabController,
+          controller: _gfTabController,
           children: [
-            SingleChildScrollView(child: Dashboard()),
+            SingleChildScrollView(
+                child: Dashboard(
+              timeSmokeFree: _timeSmokeFree,
+              quitDateReached: _quitDateReached,
+            )),
             SingleChildScrollView(child: JournalPage()),
             SingleChildScrollView(child: GoalsPage()),
           ],
@@ -97,7 +104,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           length: 3,
           tabBarHeight: 15 * wm,
           tabBarColor: appBar,
-          controller: gfTabController,
+          controller: _gfTabController,
           indicatorColor: darkGreen,
           unselectedLabelColor: Colors.white,
           labelColor: darkGreen,
@@ -141,17 +148,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         MaterialPageRoute(
           builder: (context) => SettingsPage(),
         ),
-      );
+      ).then((value) {
+        if (value == true) {
+          setState(() {
+            _quitDateReached = smokedata['quitDateDT'].difference(DateTime.now()) < Duration(seconds: 0);
+          });
+        }
+      });
     }
     if (choice == 'Logout') {
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          elevation: 0,
           backgroundColor: appBar,
-          title: Text(
-            'Confirm Logout?',
-            style: TextStyle(color: Colors.white),
-          ),
+          // title: Text(
+          //   'Confirm Logout?',
+          //   style: TextStyle(color: Colors.white),
+          // ),
           content: Text(
             "Just making sure you didn't pressed accidently xD",
             style: TextStyle(color: Colors.white),
@@ -174,7 +188,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               },
               child: Text(
                 'Logout',
-                style: TextStyle(color: darkGreen),
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -185,9 +199,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   Future<bool> _onPop() async {
     DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
-      currentBackPressTime = now;
+    if (_currentBackPressTime == null || now.difference(_currentBackPressTime) > Duration(seconds: 2)) {
+      _currentBackPressTime = now;
       _showToast('Press back again to exit');
       return false;
     }

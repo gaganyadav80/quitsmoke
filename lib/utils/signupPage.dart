@@ -2,8 +2,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:focus_widget/focus_widget.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:login/login.dart';
 import 'package:quit_smoke/enums/var.dart';
+import 'package:quit_smoke/packages/login.dart';
 import 'package:quit_smoke/utils/getSmokeData.dart';
 import 'package:toast/toast.dart';
 
@@ -153,6 +153,9 @@ class _SignupPageState extends State<SignupPage> {
                     textInputAction: TextInputAction.next,
                     enableInteractiveSelection: true,
                     enableSuggestions: false,
+                    onEditingComplete: () {
+                      _rePasswordFocus.requestFocus();
+                    },
                     onChanged: (value) {
                       if (value.isEmpty) {
                         setState(() => _isPassValid = false);
@@ -268,8 +271,7 @@ class _SignupPageState extends State<SignupPage> {
                             //
                             _showToast("Please connect to internet");
                             //
-                          } else if (_passwordController.text.isEmpty ||
-                              _emailController.text.isEmpty) {
+                          } else if (_passwordController.text.isEmpty || _emailController.text.isEmpty) {
                             //
                             _showToast("Please fill all the details");
                             //

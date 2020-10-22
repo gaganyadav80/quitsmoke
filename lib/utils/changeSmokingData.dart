@@ -47,7 +47,7 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
               _showDialog(
                 title: packcostStr,
                 onPressedOK: () {
-                  DocRef.smokedataRef.updateData({
+                  DocRef.smokedataRef.update({
                     "packCost": int.parse(_textEditingController.text),
                   });
                   setState(() {
@@ -55,10 +55,8 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   });
 
                   // money saved
-                  moneyTillSaved = (moneyMultiplier.inDays) *
-                      smokedata['dailyQty'] *
-                      (smokedata['packCost'] / smokedata['packQty']);
-                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                  moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
                   //
 
                   _textEditingController.clear();
@@ -94,7 +92,7 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
               _showDialog(
                 title: packqtyStr,
                 onPressedOK: () {
-                  DocRef.smokedataRef.updateData({
+                  DocRef.smokedataRef.update({
                     "packQty": int.parse(_textEditingController.text),
                   });
                   setState(() {
@@ -102,10 +100,8 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   });
 
                   // money saved
-                  moneyTillSaved = (moneyMultiplier.inDays) *
-                      smokedata['dailyQty'] *
-                      (smokedata['packCost'] / smokedata['packQty']);
-                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                  moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
                   //
 
                   _textEditingController.clear();
@@ -141,7 +137,7 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
               _showDialog(
                 title: dailyqtyStr,
                 onPressedOK: () {
-                  DocRef.smokedataRef.updateData({
+                  DocRef.smokedataRef.update({
                     "dailyQty": int.parse(_textEditingController.text),
                   });
                   setState(() {
@@ -149,10 +145,8 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   });
 
                   // money saved
-                  moneyTillSaved = (moneyMultiplier.inDays) *
-                      smokedata['dailyQty'] *
-                      (smokedata['packCost'] / smokedata['packQty']);
-                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                  moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
                   //
 
                   _textEditingController.clear();

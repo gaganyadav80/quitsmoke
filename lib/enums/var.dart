@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:login/login.dart';
 import 'package:quit_smoke/enums/sizeConfig.dart';
+import 'package:quit_smoke/packages/login.dart';
 
 double hm = SizeConfig.heightMultiplier;
 double wm = SizeConfig.widthMultiplier;
@@ -19,61 +19,15 @@ Color introPink = Color(0xffF10050);
 Color introYellow = Color(0xffF0B809);
 Color introButtons = Color(0xff2670C2);
 
-// * Logic values
-// bool isFirstLaunch = true;
-
-// void setFirstLaunch({bool isFirstLaunch = true}) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setBool('isFirstLaunch', isFirstLaunch);
-// }
-
-// Future<bool> getFirstLauch() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   return prefs.getBool('isFirstLaunch');
-// }
-
-// Future<Null> setQuitDate({String value}) async {
-//   print('setQuitDate: $value');
-
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   await prefs.setString('quitDate', value);
-// }
-
-// Future<String> getQuitDate() async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   return prefs.getString('quitDate');
-// }
 String collectionName;
 
 class DocRef {
   static CollectionReference userRef;
   //
-  static final DocumentReference smokedataRef = userRef.document("smokeData");
-  static final DocumentReference journaldataRef = userRef.document("journalData");
-  static final DocumentReference goaldataRef = userRef.document("goalData");
+  static final DocumentReference smokedataRef = userRef.doc("smokeData");
+  static final DocumentReference journaldataRef = userRef.doc("journalData");
+  static final DocumentReference goaldataRef = userRef.doc("goalData");
 }
-
-// class SmokeData {
-//   static int packCost = 0;
-//   static int packQty = 0;
-//   static int dailyQty = 0;
-//   static String quitDateStr;
-//   static DateTime quitDateDT;
-// }
-
-// class JournalData {
-//   static DateTime dateSmokedDT;
-//   static String dateSmokedStr;
-//   static int todayQty;
-//   static int craveRating;
-//   static String comment;
-// }
-
-// class GoalsData {
-//   static DateTime goalDateDT;
-//   static String goalDateStr;
-//   static String goal;
-// }
 
 Map<String, dynamic> smokedata = {
   'packCost': 0,
@@ -97,29 +51,28 @@ Map<String, dynamic> goalsData = {
   'goalDateDT': null,
 };
 
-String timeSmokeFree;
-bool quitDateReached = false;
-
 Duration moneyMultiplier;
 double moneyTillSaved;
-int yearlySaved;
+double yearlySaved;
 
 void setSmokeData() {
-  Timestamp _timestamp;
+  int _timestamp;
 
   DocRef.smokedataRef.get().then((document) {
     if (document.exists && document != null) {
-      smokedata = document.data;
+      smokedata = document.data();
 
-      _timestamp = document.data['quitDateDT'];
-      smokedata['quitDateDT'] = _timestamp.toDate();
+      _timestamp = document.data()['quitDateDT'];
+      smokedata['quitDateDT'] = DateTime.fromMillisecondsSinceEpoch(_timestamp);
+
+      // DateTime tempQuitDateDT = smokedata()['quitDateDT'];
 
       print("DATA CHECK AND GET SUCCESSFULL");
 
       // setState(() {
       moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
       moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
       // });
     } else {
       print("DATA NOT PRESENT");
@@ -128,9 +81,10 @@ void setSmokeData() {
 }
 
 void setReference() {
-  collectionName = "${Login.currentUser.displayName.toLowerCase().trim()}_${Login.currentUser.uid}";
+  // print(Login.currentUser);
+  collectionName = "${Login.currentUser.email}";
   debugPrint("COLLECTION : $collectionName");
-  DocRef.userRef = Firestore.instance.collection("$collectionName");
+  DocRef.userRef = FirebaseFirestore.instance.collection("$collectionName");
 }
 
 // document.data.forEach((key, value) {

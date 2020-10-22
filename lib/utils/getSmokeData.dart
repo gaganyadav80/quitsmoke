@@ -196,6 +196,9 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                           cancelStyle: TextStyle(color: Colors.grey[500], fontSize: 4.5 * wm),
                           doneStyle: TextStyle(color: darkGreen, fontSize: 4.5 * wm),
                           itemStyle: TextStyle(color: Colors.white, fontSize: 5.5 * wm),
+                          titleHeight: 13 * wm,
+                          itemHeight: 10 * wm,
+                          containerHeight: 65 * wm,
                         ),
                         onConfirm: (time) {
                           _datetime = DateTime(
@@ -256,12 +259,12 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                     _showToast("Please connect to internet");
                     //
                   } else if (_emptyField == false) {
-                    DocRef.smokedataRef.setData({
+                    DocRef.smokedataRef.set({
                       'packCost': int.parse(_packcostController.text),
                       'packQty': int.parse(_packqtyController.text),
                       'dailyQty': int.parse(_dailyqtyController.text),
                       'quitDateStr': _quitdateController.text,
-                      'quitDateDT': Timestamp.fromDate(_datetime),
+                      'quitDateDT': _datetime.millisecondsSinceEpoch,
                     });
                     // SmokeData.packCost = int.parse(_packcostController.text);
                     // SmokeData.packQty = int.parse(_packqtyController.text);
@@ -280,7 +283,7 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                     // money saved
                     moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
                     moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-                    yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                    yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
                     //
 
                     _showToast("Data updated!");
@@ -297,6 +300,7 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
+                        elevation: 0,
                         backgroundColor: appBar,
                         content: Text(
                           "Please fill all the required fields to continue.",

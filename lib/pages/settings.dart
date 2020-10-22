@@ -32,13 +32,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // debugPrint('QUITDATE : ${SmokeData.quitDateStr} =================================');
-
     return Scaffold(
       backgroundColor: body,
       appBar: AppBar(
         title: Text("Settings"),
         backgroundColor: appBar,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.maybePop(context, true),
+        ),
       ),
       body: Column(
         children: [
@@ -89,6 +92,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       cancelStyle: TextStyle(color: Colors.grey[500], fontSize: 4.5 * wm),
                       doneStyle: TextStyle(color: darkGreen, fontSize: 4.5 * wm),
                       itemStyle: TextStyle(color: Colors.white, fontSize: 5.5 * wm),
+                      titleHeight: 13 * wm,
+                      itemHeight: 10 * wm,
+                      containerHeight: 65 * wm,
                     ),
                     onConfirm: (time) {
                       _datetime = DateTime(
@@ -100,8 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       );
                       debugPrint('confirm $_datetime');
 
-                      _quitdateController.text =
-                          "${DateFormat("h:mm a, dd MMM yyyy").format(_datetime)}";
+                      _quitdateController.text = "${DateFormat("h:mm a, dd MMM yyyy").format(_datetime)}";
                       setState(() {
                         smokedata['quitDateStr'] = _quitdateController.text;
                         smokedata['quitDateDT'] = _datetime;
@@ -109,15 +114,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
                       // money saved
                       moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
-                      moneyTillSaved = (moneyMultiplier.inDays) *
-                          smokedata['dailyQty'] *
-                          (smokedata['packCost'] / smokedata['packQty']);
-                      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toInt();
+                      moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
                       //
 
-                      DocRef.smokedataRef.updateData({
+                      DocRef.smokedataRef.update({
                         'quitDateStr': _quitdateController.text,
-                        'quitDateDT': Timestamp.fromDate(_datetime),
+                        'quitDateDT': _datetime.millisecondsSinceEpoch,
                       });
                     },
                   );
@@ -214,6 +217,7 @@ class _SettingsPageState extends State<SettingsPage> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
+                  elevation: 0,
                   backgroundColor: appBar,
                   content: Text(
                     "Are you sure about this?",
@@ -233,7 +237,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        DocRef.smokedataRef.updateData({
+                        DocRef.smokedataRef.update({
                           "packCost": 0,
                           "packQty": 0,
                           "dailyQty": 0,

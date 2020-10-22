@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:quit_smoke/enums/sizeConfig.dart';
 import 'package:quit_smoke/enums/var.dart';
@@ -8,7 +9,9 @@ import 'package:quit_smoke/ui/splashscreen.dart';
 
 import 'packages/login.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -21,6 +24,7 @@ class MyApp extends StatelessWidget {
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(accentColor: appBar),
           home: SplashScreen(
             seconds: 1,
             navigateAfterSeconds: CheckLogin(),
