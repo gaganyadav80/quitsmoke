@@ -55,8 +55,10 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   });
 
                   // money saved
-                  moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
+                  smokingCostPerDay = smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                  // moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
+                  moneyTillSaved = double.parse(((moneyMultiplier.inMinutes) * smokingCostPerDay / 3600).toStringAsFixed(2));
+                  yearlySaved = double.parse((smokingCostPerDay * 365).toStringAsFixed(2));
                   //
 
                   _textEditingController.clear();
@@ -100,8 +102,10 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   });
 
                   // money saved
-                  moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
+                  smokingCostPerDay = smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                  // moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
+                  moneyTillSaved = double.parse(((moneyMultiplier.inMinutes) * smokingCostPerDay / 3600).toStringAsFixed(2));
+                  yearlySaved = double.parse((smokingCostPerDay * 365).toStringAsFixed(2));
                   //
 
                   _textEditingController.clear();
@@ -145,8 +149,10 @@ class _ChangeSmokingDataState extends State<ChangeSmokingData> {
                   });
 
                   // money saved
-                  moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-                  yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
+                  smokingCostPerDay = smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                  // moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
+                  moneyTillSaved = double.parse(((moneyMultiplier.inMinutes) * smokingCostPerDay / 3600).toStringAsFixed(2));
+                  yearlySaved = double.parse((smokingCostPerDay * 365).toStringAsFixed(2));
                   //
 
                   _textEditingController.clear();

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -266,24 +265,21 @@ class _GetSmokeDataState extends State<GetSmokeData> {
                       'quitDateStr': _quitdateController.text,
                       'quitDateDT': _datetime.millisecondsSinceEpoch,
                     });
-                    // SmokeData.packCost = int.parse(_packcostController.text);
-                    // SmokeData.packQty = int.parse(_packqtyController.text);
-                    // SmokeData.dailyQty = int.parse(_dailyqtyController.text);
-                    // SmokeData.quitDateStr = _quitdateController.text;
-                    // SmokeData.quitDateDT = _datetime;
 
-                    smokedata = {
-                      'packCost': int.parse(_packcostController.text),
-                      'packQty': int.parse(_packqtyController.text),
-                      'dailyQty': int.parse(_dailyqtyController.text),
-                      'quitDateStr': _quitdateController.text,
-                      'quitDateDT': _datetime,
-                    };
+                    //TODO check if works without it
+                    //! as setSmokeData will be called on home initState and it does this
+                    // smokedata = {
+                    //   'packCost': int.parse(_packcostController.text),
+                    //   'packQty': int.parse(_packqtyController.text),
+                    //   'dailyQty': int.parse(_dailyqtyController.text),
+                    //   'quitDateStr': _quitdateController.text,
+                    //   'quitDateDT': _datetime,
+                    // };
 
-                    // money saved
-                    moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
-                    moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-                    yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
+                    // smokingCostPerDay = smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
+                    // moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
+                    // moneyTillSaved = double.parse(((moneyMultiplier.inMinutes) * smokingCostPerDay / 3600).toStringAsFixed(2));
+                    // yearlySaved = double.parse((smokingCostPerDay * 365).toStringAsFixed(2));
                     //
 
                     _showToast("Data updated!");

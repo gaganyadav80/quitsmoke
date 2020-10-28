@@ -54,6 +54,7 @@ Map<String, dynamic> goalsData = {
 Duration moneyMultiplier;
 double moneyTillSaved;
 double yearlySaved;
+double smokingCostPerDay;
 
 void setSmokeData() {
   int _timestamp;
@@ -70,9 +71,10 @@ void setSmokeData() {
       print("DATA CHECK AND GET SUCCESSFULL");
 
       // setState(() {
+      smokingCostPerDay = smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
       moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
-      moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
+      moneyTillSaved = double.parse(((moneyMultiplier.inMinutes) * smokingCostPerDay / 3600).toStringAsFixed(2));
+      yearlySaved = double.parse((smokingCostPerDay * 365).toStringAsFixed(2));
       // });
     } else {
       print("DATA NOT PRESENT");

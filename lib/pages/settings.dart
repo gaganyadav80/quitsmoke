@@ -113,9 +113,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       });
 
                       // money saved
+                      // smokingCostPerDay = smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
                       moneyMultiplier = DateTime.now().difference(smokedata['quitDateDT']);
-                      moneyTillSaved = (moneyMultiplier.inDays) * smokedata['dailyQty'] * (smokedata['packCost'] / smokedata['packQty']);
-                      yearlySaved = ((moneyTillSaved / moneyMultiplier.inDays) * 365).toDouble();
+                      moneyTillSaved = double.parse(((moneyMultiplier.inMinutes) * smokingCostPerDay / 3600).toStringAsFixed(2));
+                      yearlySaved = double.parse((smokingCostPerDay * 365).toStringAsFixed(2));
                       //
 
                       DocRef.smokedataRef.update({
